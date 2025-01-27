@@ -33,6 +33,12 @@ const UserList = ({ users, onDelete }) => {
             const [firstName, ...rest] = nameWithoutTitle(user.name);
             const lastName = rest.join(" ");
 
+            const normalizePhone = (phone) => {
+              return phone
+                .replace(/x.*$/, "") // Remove extensions
+                .replace(/[^0-9]/g, ""); // Remove non-numeric characters
+            };
+
             return (
               <tr key={user.id}>
                 <td>{user.id}</td>
@@ -40,7 +46,7 @@ const UserList = ({ users, onDelete }) => {
                 <td>{lastName}</td>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
-                <td>{user.phone}</td>
+                <td>{normalizePhone(user.phone)}</td>
                 <td className="actions-icons-container">
                   <button className="btn" onClick={() => onDelete(user.id)}>
                     <FaEdit className="edit-icon icon" />

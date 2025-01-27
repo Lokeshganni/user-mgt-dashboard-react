@@ -152,6 +152,7 @@ body {
   font-weight: bold;
   color: white;
   padding: 0;
+  cursor: pointer;
 }
 
 .table-container {
@@ -215,11 +216,6 @@ td {
 
 tr {
   border-bottom: 1px solid #ccc;
-}
-
-tbody {
-  max-height: 10px;
-  overflow-y: auto;
 }
 
 .actions-icons-container{

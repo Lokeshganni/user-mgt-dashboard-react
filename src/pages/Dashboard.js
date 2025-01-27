@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
 import UserList from "../components/UserList";
-import { getUsers, deleteUser } from "../services/userService";
+import { getUsers, addUser, deleteUser } from "../services/userService";
+import Modal from "../components/Modal/Modal.js";
+import AddUserForm from "../components/UserForm/UserForm.js";
 
 import { CiSearch } from "react-icons/ci";
 import { FiUserPlus } from "react-icons/fi";
@@ -9,8 +11,9 @@ import "../styles/App.css";
 
 const Dashboard = () => {
   const [users, setUsers] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [isAddUserModalOpen, setAddUserModalOpen] = useState(false);
 
   useEffect(() => {
     getUsers().then((data) => {
@@ -31,10 +34,18 @@ const Dashboard = () => {
     // Filter users based on first or last name
     const filtered = users.filter(
       (user) =>
-        user.name.toLowerCase().includes(value) || 
-        user.username.toLowerCase().includes(value) 
+        user.name.toLowerCase().includes(value) ||
+        user.username.toLowerCase().includes(value)
     );
     setFilteredUsers(filtered);
+  };
+
+  const handleAddUser =async (newUser) => {
+    const putRes= addUser(newUser);
+    // const data=await putRes.json()
+    setUsers([...users, newUser]);
+    console.log(putRes)
+    setAddUserModalOpen(false); // Close modal after adding user
   };
 
   return (
@@ -43,18 +54,39 @@ const Dashboard = () => {
         <div className="dashboard-headers-container">
           <h2 className="user-list-heading">User List</h2>
           <div className="search-user-container search-user-lg-container">
-            <input value={searchTerm} onChange={handleSearch} type="search" placeholder="search user by first or last name" />
+            <input
+              value={searchTerm}
+              onChange={handleSearch}
+              type="search"
+              placeholder="search user by first or last name"
+            />
             <CiSearch className="search-icon" />
           </div>
           <div className="add-user-btn-container">
-            <FiUserPlus className="add-user-icon"/>
-            <button className="add-user-btn">Add User</button>
+            <FiUserPlus className="add-user-icon" />
+            <button
+              onClick={() => setAddUserModalOpen(true)}
+              className="add-user-btn"
+            >
+              Add User
+            </button>
           </div>
+          <Modal
+            isOpen={isAddUserModalOpen}
+            onClose={() => setAddUserModalOpen(false)}
+          >
+            <AddUserForm onAddUser={handleAddUser} />
+          </Modal>
         </div>
         <div className="search-user-container search-user-sm-container">
-            <input value={searchTerm} onChange={handleSearch} type="search" placeholder="search user by first or last name" />
-            <CiSearch className="search-icon" />
-          </div>
+          <input
+            value={searchTerm}
+            onChange={handleSearch}
+            type="search"
+            placeholder="search user by first or last name"
+          />
+          <CiSearch className="search-icon" />
+        </div>
         <UserList users={filteredUsers} onDelete={handleDelete} />
       </div>
     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import UserForm from '../components/UserForm';
+import UserForm from '../components/UserForm/UserForm.js';
 import { addUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
 

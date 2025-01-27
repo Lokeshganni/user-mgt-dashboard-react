@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import UserForm from '../components/UserForm';
+import UserForm from '../components/UserForm/UserForm.js';
 import { getUser, updateUser } from '../services/userService';
 import { useNavigate, useParams } from 'react-router-dom';
 
