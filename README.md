@@ -1,7 +1,7 @@
 # User Management Dashboard
 
 ## Introduction
-A simple web application where users can view, add, edit, and delete user details from a mock backend API.
+A simple web application where users can view, add, edit, and delete user details from a mock API.
 
 ## Features
 This User Management Dashboard provides a comprehensive solution for managing users, offering essential CRUD (Create, Read, Update, Delete) operations. Below are the key features of the project:
