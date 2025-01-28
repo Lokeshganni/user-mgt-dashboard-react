@@ -1,24 +1,9 @@
-import {useState} from 'react'
-
-import Modal from './Modal/Modal.js'
-import AddUserForm from './UserForm/UserForm.js';
-
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 
 import "../styles/App.css";
 
-const UserList = ({ users, onDelete, onEdit }) => {
-  const [isEditUserModalOpen, setEditUserModalOpen]=useState(false)
-
-  const handleEditUser =async (id) => {
-    setEditUserModalOpen(true)
-    updateUser(id).then(data=>{
-      setUsers([...users,data])
-      setFilteredUsers([...filteredUsers,data])
-    })
-    setEditUserModalOpen(false); // Close modal after adding user
-  };
+const UserList = ({ users, onDelete }) => {
 
   return (
     <div className="table-container">
@@ -62,15 +47,9 @@ const UserList = ({ users, onDelete, onEdit }) => {
                 <td>{user.email}</td>
                 <td>{normalizePhone(user.phone)}</td>
                 <td className="actions-icons-container">
-                  <button className="btn" onClick={() => onEdit(user.id)}>
+                  <button className="btn" >
                     <FaEdit className="edit-icon icon" />
                   </button>
-                  <Modal
-            isOpen={isEditUserModalOpen}
-            onClose={() => setEditUserModalOpen(false)}
-          >
-            <AddUserForm onSubmit={handleEditUser} />
-          </Modal>
                   <button className="btn" onClick={() => onDelete(user.id)}>
                     <MdDelete className="delete-icon icon" />
                   </button>
