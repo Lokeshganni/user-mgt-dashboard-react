@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import UserForm from '../components/UserForm/UserForm.js';
 import { getUser, updateUser } from '../services/userService';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const EditUser = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [initialValues, setInitialValues] = useState(null);
 
   useEffect(() => {
@@ -14,7 +13,6 @@ const EditUser = () => {
 
   const handleSubmit = async (user) => {
     await updateUser(id, user);
-    navigate('/');
   };
 
   if (!initialValues) return <p>Loading...</p>;

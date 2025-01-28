@@ -1,14 +1,11 @@
 import React from 'react';
 import UserForm from '../components/UserForm/UserForm.js';
 import { addUser } from '../services/userService';
-import { useNavigate } from 'react-router-dom';
 
 const AddUser = () => {
-  const navigate = useNavigate();
 
   const handleSubmit = async (user) => {
     await addUser(user);
-    navigate('/');
   };
 
   return (

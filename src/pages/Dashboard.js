@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import UserList from "../components/UserList";
-import { getUsers, addUser, deleteUser } from "../services/userService";
+import { getUsers, addUser, deleteUser, updateUser } from "../services/userService";
 import Modal from "../components/Modal/Modal.js";
 import AddUserForm from "../components/UserForm/UserForm.js";
 
@@ -25,6 +25,7 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     await deleteUser(id);
     setUsers(users.filter((user) => user.id !== id));
+    setFilteredUsers(filteredUsers.filter((user) => user.id !== id))
   };
 
   const handleSearch = (e) => {
@@ -41,10 +42,10 @@ const Dashboard = () => {
   };
 
   const handleAddUser =async (newUser) => {
-    const putRes= addUser(newUser);
-    // const data=await putRes.json()
-    setUsers([...users, newUser]);
-    console.log(putRes)
+    addUser(newUser).then(data=>{
+      setUsers([...users,data])
+      setFilteredUsers([...filteredUsers,data])
+    })
     setAddUserModalOpen(false); // Close modal after adding user
   };
 
@@ -75,7 +76,7 @@ const Dashboard = () => {
             isOpen={isAddUserModalOpen}
             onClose={() => setAddUserModalOpen(false)}
           >
-            <AddUserForm onAddUser={handleAddUser} />
+            <AddUserForm onSubmit={handleAddUser} />
           </Modal>
         </div>
         <div className="search-user-container search-user-sm-container">

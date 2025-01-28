@@ -2,61 +2,71 @@ import { useState } from "react";
 
 import "./UserForm.css";
 
-const AddUserForm = ({ onAddUser }) => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [phone, setPhone] = useState("");
+const AddUserForm = ({ initialValues, onSubmit }) => {
+
+  if (!initialValues){
+     initialValues={
+      name:'',
+      username:'',
+      email:'',
+      phone:''
+     }
+  }
+  const [formValues, setFormValues] = useState(initialValues);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newUser = { name, email, username,phone };
-    onAddUser(newUser);
-    setName("");
-    setEmail("");
-    setUsername("");
-    setPhone('')
+    onSubmit(formValues);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
   };
 
   return (
     <form className="form-container" onSubmit={handleSubmit}>
       <label htmlFor="fullName">Full Name</label>
       <input
+        name="name"
         placeholder="eg: Leanne Graham"
         id="fullName"
         type="text"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={formValues.name}
+        onChange={handleChange}
         required
       />
 
       <label htmlFor="userName">Username</label>
       <input
+        name="username"
         placeholder="eg: Bret"
         id="userName"
         type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        value={formValues.username}
+        onChange={handleChange}
         required
       />
 
       <label htmlFor="email">Email</label>
       <input
+        name="email"
         placeholder="eg: Sincere@april.biz"
         id="email"
         type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={formValues.email}
+        onChange={handleChange}
         required
       />
 
       <label htmlFor="phone">Phone</label>
       <input
+        name="phone"
         placeholder="eg: 17707368031"
         id="phone"
         type="text"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
+        value={formValues.phone}
+        onChange={handleChange}
         required
       />
 
@@ -68,10 +78,6 @@ const AddUserForm = ({ onAddUser }) => {
 };
 
 export default AddUserForm;
-
-// import React, { useState } from 'react';
-
-// import '../styles/App.css'
 
 // const UserForm = ({ initialValues, onSubmit }) => {
 //   const [formValues, setFormValues] = useState(initialValues);
