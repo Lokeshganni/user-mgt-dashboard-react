@@ -3,15 +3,6 @@ import { useState } from "react";
 import "./UserForm.css";
 
 const AddUserForm = ({ initialValues, onSubmit }) => {
-
-  if (!initialValues){
-     initialValues={
-      name:'',
-      username:'',
-      email:'',
-      phone:''
-     }
-  }
   const [formValues, setFormValues] = useState(initialValues);
 
   const handleSubmit = (e) => {
@@ -29,7 +20,7 @@ const AddUserForm = ({ initialValues, onSubmit }) => {
       <label htmlFor="fullName">Full Name</label>
       <input
         name="name"
-        placeholder="eg: Leanne Graham"
+        placeholder="e.g., Leanne Graham"
         id="fullName"
         type="text"
         value={formValues.name}
@@ -40,7 +31,7 @@ const AddUserForm = ({ initialValues, onSubmit }) => {
       <label htmlFor="userName">Username</label>
       <input
         name="username"
-        placeholder="eg: Bret"
+        placeholder="e.g., Bret"
         id="userName"
         type="text"
         value={formValues.username}
@@ -51,7 +42,7 @@ const AddUserForm = ({ initialValues, onSubmit }) => {
       <label htmlFor="email">Email</label>
       <input
         name="email"
-        placeholder="eg: Sincere@april.biz"
+        placeholder="e.g., Sincere@april.biz"
         id="email"
         type="email"
         value={formValues.email}
@@ -62,7 +53,7 @@ const AddUserForm = ({ initialValues, onSubmit }) => {
       <label htmlFor="phone">Phone</label>
       <input
         name="phone"
-        placeholder="eg: 17707368031"
+        placeholder="e.g., 17707368031"
         id="phone"
         type="text"
         value={formValues.phone}
@@ -71,56 +62,10 @@ const AddUserForm = ({ initialValues, onSubmit }) => {
       />
 
       <button className="form-submit-btn btn-effect" type="submit">
-        Add User
+        {initialValues.id ? "Update User" : "Add User"}
       </button>
     </form>
   );
 };
 
 export default AddUserForm;
-
-// const UserForm = ({ initialValues, onSubmit }) => {
-//   const [formValues, setFormValues] = useState(initialValues);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormValues({ ...formValues, [name]: value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     onSubmit(formValues);
-//   };
-
-//   return (
-//     <form onSubmit={handleSubmit}>
-//       <input
-//         name="firstName"
-//         placeholder="First Name"
-//         value={formValues.firstName}
-//         onChange={handleChange}
-//       />
-//       <input
-//         name="lastName"
-//         placeholder="Last Name"
-//         value={formValues.lastName}
-//         onChange={handleChange}
-//       />
-//       <input
-//         name="email"
-//         placeholder="Email"
-//         value={formValues.email}
-//         onChange={handleChange}
-//       />
-//       <input
-//         name="department"
-//         placeholder="Department"
-//         value={formValues.department}
-//         onChange={handleChange}
-//       />
-//       <button type="submit">Submit</button>
-//     </form>
-//   );
-// }
-
-// export default UserForm;

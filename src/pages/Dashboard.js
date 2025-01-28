@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 
 import UserList from "../components/UserList";
-import { getUsers, addUser, deleteUser, updateUser } from "../services/userService";
+import {
+  getUsers,
+  addUser,
+  deleteUser,
+  updateUser,
+} from "../services/userService";
 import Modal from "../components/Modal/Modal.js";
 import AddUserForm from "../components/UserForm/UserForm.js";
 
@@ -14,25 +19,32 @@ const Dashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [isAddUserModalOpen, setAddUserModalOpen] = useState(false);
+  const [editUser, setEditUser] = useState(null);
+  const [notification, setNotification] = useState("");
 
   useEffect(() => {
     getUsers().then((data) => {
       setUsers(data);
-      setFilteredUsers(data); // Initialize filteredUsers to match users
+      setFilteredUsers(data);
     });
   }, []);
+
+  const showNotification = (message) => {
+    setNotification(message);
+    setTimeout(() => setNotification(""), 3000); // Clear notification after 3 seconds
+  };
 
   const handleDelete = async (id) => {
     await deleteUser(id);
     setUsers(users.filter((user) => user.id !== id));
-    setFilteredUsers(filteredUsers.filter((user) => user.id !== id))
+    setFilteredUsers(filteredUsers.filter((user) => user.id !== id));
+    showNotification("User successfully deleted");
   };
 
   const handleSearch = (e) => {
     const value = e.target.value.toLowerCase();
     setSearchTerm(value);
 
-    // Filter users based on first or last name
     const filtered = users.filter(
       (user) =>
         user.name.toLowerCase().includes(value) ||
@@ -41,12 +53,31 @@ const Dashboard = () => {
     setFilteredUsers(filtered);
   };
 
-  const handleAddUser =async (newUser) => {
-    addUser(newUser).then(data=>{
-      setUsers([...users,data])
-      setFilteredUsers([...filteredUsers,data])
-    })
-    setAddUserModalOpen(false); // Close modal after adding user
+  const handleAddOrEditUser = async (user) => {
+    if (editUser) {
+      // Editing an existing user
+      const updatedUser = await updateUser(editUser.id, user);
+      setUsers(users.map((u) => (u.id === editUser.id ? updatedUser : u)));
+      setFilteredUsers(
+        filteredUsers.map((u) => (u.id === editUser.id ? updatedUser : u))
+      );
+      showNotification("User details updated successfully");
+    } else {
+      // Adding a new user
+      const newUser = await addUser(user);
+      setUsers([...users, newUser]);
+      setFilteredUsers([...filteredUsers, newUser]);
+      showNotification("User successfully added");
+    }
+
+    // Reset state and close modal
+    setEditUser(null);
+    setAddUserModalOpen(false);
+  };
+
+  const handleEditClick = (user) => {
+    setEditUser(user); // Set the user to be edited
+    setAddUserModalOpen(true); // Open the modal
   };
 
   return (
@@ -59,14 +90,17 @@ const Dashboard = () => {
               value={searchTerm}
               onChange={handleSearch}
               type="search"
-              placeholder="search user by first or last name"
+              placeholder="Search user by first or last name"
             />
             <CiSearch className="search-icon" />
           </div>
           <div className="add-user-btn-container">
             <FiUserPlus className="add-user-icon" />
             <button
-              onClick={() => setAddUserModalOpen(true)}
+              onClick={() => {
+                setEditUser(null); // Reset edit user when adding a new user
+                setAddUserModalOpen(true);
+              }}
               className="add-user-btn"
             >
               Add User
@@ -76,7 +110,12 @@ const Dashboard = () => {
             isOpen={isAddUserModalOpen}
             onClose={() => setAddUserModalOpen(false)}
           >
-            <AddUserForm onSubmit={handleAddUser} />
+            <AddUserForm
+              initialValues={
+                editUser || { name: "", username: "", email: "", phone: "" }
+              }
+              onSubmit={handleAddOrEditUser}
+            />
           </Modal>
         </div>
         <div className="search-user-container search-user-sm-container">
@@ -84,14 +123,20 @@ const Dashboard = () => {
             value={searchTerm}
             onChange={handleSearch}
             type="search"
-            placeholder="search user by first or last name"
+            placeholder="Search user by first or last name"
           />
           <CiSearch className="search-icon" />
         </div>
-        <UserList users={filteredUsers} onDelete={handleDelete} />
+        <UserList
+          users={filteredUsers}
+          onDelete={handleDelete}
+          onEdit={handleEditClick}
+        />
       </div>
+      {notification && <div className="notification">{notification}</div>}
     </div>
   );
 };
 
 export default Dashboard;
+
