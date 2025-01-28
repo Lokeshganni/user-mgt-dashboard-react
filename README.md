@@ -22,6 +22,9 @@ If you want to run our code then please read the instructions below :
 - After installation, now run `npm start` and  you will see a new window will be opening in the default browser which is running on port `http://localhost:3000`
 - Now you see app running, and the user management dashboard page should display.
 
+## snaps of dashboard
+![Image](https://github.com/user-attachments/assets/510435b5-4cf6-4045-8a40-8b4c97c22643)
+
 ## Usage
 As there are some validations please follow this when using -
 - On the homepage, a list of users is displayed with details such as ID, First Name, Last Name, Username, Email, and Phone Number.
